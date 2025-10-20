@@ -92,28 +92,51 @@ const Index = () => {
       return;
     }
 
-    setStatus("listening");
-    setIsVoiceMode(true);
+    // Request microphone permission first
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(() => {
+        setStatus("listening");
+        setIsVoiceMode(true);
 
-    speechRecognition.current.start(
-      (transcript) => {
-        setStatus("idle");
-        setIsVoiceMode(false);
-        if (transcript.trim()) {
-          sendToAI(transcript);
-        }
-      },
-      (error) => {
-        console.error("Speech recognition error:", error);
         toast({
-          title: "Voice Input Error",
-          description: "Failed to recognize speech. Please try again.",
+          title: "Listening...",
+          description: "Speak now. I'm listening, Sir.",
+        });
+
+        speechRecognition.current.start(
+          (transcript) => {
+            console.log("Transcript received:", transcript);
+            setStatus("idle");
+            setIsVoiceMode(false);
+            if (transcript.trim()) {
+              sendToAI(transcript);
+            } else {
+              toast({
+                title: "No Speech",
+                description: "I didn't catch that. Please try again.",
+              });
+            }
+          },
+          (error) => {
+            console.error("Speech recognition error:", error);
+            toast({
+              title: "Voice Input Error",
+              description: error || "Failed to recognize speech. Please try again.",
+              variant: "destructive",
+            });
+            setStatus("idle");
+            setIsVoiceMode(false);
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Microphone permission error:", error);
+        toast({
+          title: "Microphone Access Required",
+          description: "Please allow microphone access to use voice input.",
           variant: "destructive",
         });
-        setStatus("idle");
-        setIsVoiceMode(false);
-      }
-    );
+      });
   };
 
   const handleTextSubmit = (e: React.FormEvent) => {
@@ -255,6 +278,7 @@ const Index = () => {
         {/* Help Text */}
         <div className="text-center text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.6s" }}>
           <p>Click the microphone to use voice commands, or type your message above.</p>
+          <p className="mt-1 text-primary/70">💡 Tip: Click mic, wait for "Listening...", then speak clearly</p>
           <p className="mt-1">Try: "What time is it?" or "How's the weather?"</p>
         </div>
       </div>
