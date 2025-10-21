@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Mic, Send, MicOff, User } from "lucide-react";
+import { Mic, Send, MicOff, User, StopCircle } from "lucide-react";
 import { AICore } from "@/components/AICore";
 import { VoiceVisualizer } from "@/components/VoiceVisualizer";
 import { ChatWindow } from "@/components/ChatWindow";
@@ -25,6 +26,7 @@ const Index = () => {
   const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [username, setUsername] = useState<string>("");
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const speechRecognition = useRef(new SpeechRecognitionService());
   const textToSpeech = useRef(new TextToSpeechService());
@@ -210,6 +212,19 @@ const Index = () => {
     });
   };
 
+  const handleStopSpeaking = () => {
+    textToSpeech.current.stop();
+    setStatus("idle");
+    toast({
+      title: "Speech Stopped",
+      description: "Text-to-speech has been stopped.",
+    });
+  };
+
+  const handleViewHistory = () => {
+    navigate("/history");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card p-4 overflow-hidden">
       {/* Animated background effects */}
@@ -278,7 +293,7 @@ const Index = () => {
           </form>
 
           {/* Voice Button */}
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <Button
               onClick={handleVoiceInput}
               disabled={!speechRecognition.current.isSupported() || status === "processing" || status === "speaking"}
@@ -295,6 +310,16 @@ const Index = () => {
                 <Mic className="w-6 h-6" />
               )}
             </Button>
+
+            {status === "speaking" && (
+              <Button
+                onClick={handleStopSpeaking}
+                size="lg"
+                className="rounded-full w-16 h-16 bg-destructive hover:bg-destructive/90 tej-glow animate-pulse"
+              >
+                <StopCircle className="w-6 h-6" />
+              </Button>
+            )}
           </div>
 
           {/* Quick Actions */}
@@ -302,6 +327,7 @@ const Index = () => {
             onTimeClick={handleTimeClick}
             onWeatherClick={handleWeatherClick}
             onSaveClick={handleSaveChat}
+            onHistoryClick={handleViewHistory}
             onClearClick={handleClearChat}
             disabled={status !== "idle"}
           />

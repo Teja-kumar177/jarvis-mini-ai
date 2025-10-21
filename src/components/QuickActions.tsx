@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Clock, CloudRain, Trash2, Save } from "lucide-react";
+import { Clock, CloudRain, Trash2, Save, History } from "lucide-react";
 
 interface QuickActionsProps {
   onTimeClick: () => void;
   onWeatherClick: () => void;
   onClearClick: () => void;
   onSaveClick: () => void;
+  onHistoryClick: () => void;
   disabled?: boolean;
 }
 
@@ -14,6 +15,7 @@ export const QuickActions = ({
   onWeatherClick, 
   onClearClick,
   onSaveClick,
+  onHistoryClick,
   disabled 
 }: QuickActionsProps) => {
   return (
@@ -49,6 +51,17 @@ export const QuickActions = ({
       >
         <Save className="w-4 h-4 mr-2" />
         Save Chat
+      </Button>
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onHistoryClick}
+        disabled={disabled}
+        className="border-accent/50 hover:bg-accent/10 hover:border-accent tej-glow"
+      >
+        <History className="w-4 h-4 mr-2" />
+        View History
       </Button>
       
       <Button
