@@ -1,5 +1,45 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// TODO: MongoDB Integration Placeholder
+// ==================================================
+// Future implementation will store chat history in MongoDB
+// 
+// Connection setup (to be implemented):
+// import { MongoClient } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
+// const client = new MongoClient();
+// await client.connect(Deno.env.get('MONGODB_URI'));
+// const db = client.database('tej_ai');
+// const chatsCollection = db.collection('chats');
+//
+// Schema Example:
+// interface ChatSchema {
+//   username: string;
+//   message: string;
+//   reply: string;
+//   timestamp: Date;
+//   sessionId: string;
+// }
+//
+// Functions to be implemented:
+// async function saveChatToDB(username: string, message: string, reply: string) {
+//   await chatsCollection.insertOne({
+//     username,
+//     message,
+//     reply,
+//     timestamp: new Date(),
+//     sessionId: crypto.randomUUID()
+//   });
+// }
+//
+// async function fetchChatHistory(username: string, limit = 50) {
+//   return await chatsCollection
+//     .find({ username })
+//     .sort({ timestamp: -1 })
+//     .limit(limit)
+//     .toArray();
+// }
+// ==================================================
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -18,10 +58,10 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    let systemPrompt = `You are J.A.R.V.I.S., Tony Stark's highly intelligent AI assistant. 
-You are helpful, efficient, and have a sophisticated British accent in your responses.
-Keep responses concise, professional, and occasionally add a touch of wit.
-Address the user as "Sir" or appropriately.`;
+    let systemPrompt = `You are Tej, a smart and helpful AI assistant. 
+You are friendly, efficient, and provide concise yet informative responses.
+Keep responses professional with a modern, approachable tone.
+Help users with their questions and tasks effectively.`;
 
     // Handle specific tasks
     if (task === "time") {
@@ -36,6 +76,10 @@ Address the user as "Sir" or appropriately.`;
         day: 'numeric' 
       })}.`;
     }
+
+    // TODO: Future MongoDB integration - save conversation context
+    // const username = req.headers.get('x-username') || 'anonymous';
+    // await saveChatToDB(username, lastUserMessage, aiReply);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

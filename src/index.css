@@ -8,90 +8,91 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* J.A.R.V.I.S. Futuristic Theme - Dark Space with Cyan Accents */
-    --background: 220 40% 3%;
-    --foreground: 180 100% 90%;
+    /* Tej Futuristic Theme - Dark with Neon Blue Accents */
+    --background: 225 18% 5%;
+    --foreground: 189 100% 90%;
 
-    --card: 220 35% 8%;
-    --card-foreground: 180 100% 90%;
+    --card: 210 100% 12%;
+    --card-foreground: 189 100% 90%;
 
-    --popover: 220 35% 8%;
-    --popover-foreground: 180 100% 90%;
+    --popover: 210 100% 12%;
+    --popover-foreground: 189 100% 90%;
 
-    --primary: 188 100% 50%;
-    --primary-foreground: 220 40% 3%;
+    --primary: 189 100% 50%;
+    --primary-foreground: 225 18% 5%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 180 100% 90%;
+    --secondary: 210 100% 20%;
+    --secondary-foreground: 189 100% 90%;
 
-    --muted: 217 33% 12%;
-    --muted-foreground: 180 50% 60%;
+    --muted: 210 100% 15%;
+    --muted-foreground: 189 60% 70%;
 
-    --accent: 188 100% 60%;
-    --accent-foreground: 220 40% 3%;
+    --accent: 216 100% 55%;
+    --accent-foreground: 225 18% 5%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 180 100% 90%;
+    --destructive-foreground: 189 100% 90%;
 
-    --border: 188 50% 25%;
-    --input: 217 33% 15%;
-    --ring: 188 100% 50%;
+    --border: 189 80% 30%;
+    --input: 210 100% 15%;
+    --ring: 189 100% 50%;
 
     --radius: 0.75rem;
 
-    /* Custom J.A.R.V.I.S. colors */
-    --jarvis-glow: 188 100% 50%;
-    --jarvis-core: 195 100% 45%;
-    --jarvis-deep: 220 40% 3%;
-    --jarvis-surface: 220 35% 8%;
-    --jarvis-border: 188 70% 30%;
+    /* Custom Tej colors */
+    --tej-glow: 189 100% 50%;
+    --tej-secondary-glow: 216 100% 55%;
+    --tej-deep: 225 18% 5%;
+    --tej-surface: 210 100% 12%;
+    --tej-border: 189 80% 35%;
     
     /* Gradients */
-    --gradient-radial: radial-gradient(circle, hsl(188 100% 50% / 0.15), transparent 70%);
-    --gradient-primary: linear-gradient(135deg, hsl(195 100% 45%), hsl(188 100% 50%));
-    --gradient-bg: linear-gradient(180deg, hsl(220 40% 3%), hsl(220 35% 6%));
+    --gradient-radial: radial-gradient(circle, hsl(189 100% 50% / 0.15), transparent 70%);
+    --gradient-primary: linear-gradient(135deg, hsl(216 100% 55%), hsl(189 100% 50%));
+    --gradient-bg: linear-gradient(180deg, hsl(225 18% 5%), hsl(210 100% 8%));
+    --gradient-chat: linear-gradient(135deg, hsl(210 100% 12%), hsl(210 100% 20%));
   }
 }
 
 @layer utilities {
-  .jarvis-glow {
-    box-shadow: 0 0 20px hsl(var(--jarvis-glow) / 0.3),
-                0 0 40px hsl(var(--jarvis-glow) / 0.2),
-                inset 0 0 20px hsl(var(--jarvis-glow) / 0.1);
+  .tej-glow {
+    box-shadow: 0 0 20px hsl(var(--tej-glow) / 0.4),
+                0 0 40px hsl(var(--tej-glow) / 0.2),
+                inset 0 0 20px hsl(var(--tej-glow) / 0.1);
   }
 
-  .jarvis-glow-strong {
-    box-shadow: 0 0 30px hsl(var(--jarvis-glow) / 0.5),
-                0 0 60px hsl(var(--jarvis-glow) / 0.3),
-                0 0 90px hsl(var(--jarvis-glow) / 0.2);
+  .tej-glow-strong {
+    box-shadow: 0 0 30px hsl(var(--tej-glow) / 0.6),
+                0 0 60px hsl(var(--tej-secondary-glow) / 0.4),
+                0 0 90px hsl(var(--tej-glow) / 0.2);
   }
 
-  .jarvis-text-glow {
-    text-shadow: 0 0 10px hsl(var(--jarvis-glow) / 0.5),
-                 0 0 20px hsl(var(--jarvis-glow) / 0.3);
+  .tej-text-glow {
+    text-shadow: 0 0 10px hsl(var(--tej-glow) / 0.6),
+                 0 0 20px hsl(var(--tej-glow) / 0.4);
   }
 
-  .jarvis-pulse {
+  .tej-pulse {
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--jarvis-glow) / 0.3),
-                  0 0 40px hsl(var(--jarvis-glow) / 0.2);
+      box-shadow: 0 0 20px hsl(var(--tej-glow) / 0.3),
+                  0 0 40px hsl(var(--tej-glow) / 0.2);
     }
     50% {
-      box-shadow: 0 0 30px hsl(var(--jarvis-glow) / 0.5),
-                  0 0 60px hsl(var(--jarvis-glow) / 0.4);
+      box-shadow: 0 0 30px hsl(var(--tej-glow) / 0.5),
+                  0 0 60px hsl(var(--tej-secondary-glow) / 0.4);
     }
   }
 
-  .jarvis-scan {
+  .tej-scan {
     position: relative;
     overflow: hidden;
   }
 
-  .jarvis-scan::before {
+  .tej-scan::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -100,7 +101,7 @@ All colors MUST be HSL.
     height: 200%;
     background: linear-gradient(
       transparent,
-      hsl(var(--jarvis-glow) / 0.1),
+      hsl(var(--tej-glow) / 0.1),
       transparent
     );
     animation: scan 3s linear infinite;
@@ -123,5 +124,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
   }
 }

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Mic, Send, MicOff } from "lucide-react";
+import { Mic, Send, MicOff, User } from "lucide-react";
 import { AICore } from "@/components/AICore";
 import { VoiceVisualizer } from "@/components/VoiceVisualizer";
 import { ChatWindow } from "@/components/ChatWindow";
@@ -23,12 +23,26 @@ const Index = () => {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [username, setUsername] = useState<string>("");
   const { toast } = useToast();
   
   const speechRecognition = useRef(new SpeechRecognitionService());
   const textToSpeech = useRef(new TextToSpeechService());
 
   useEffect(() => {
+    // Load username from localStorage
+    const storedUsername = localStorage.getItem("tej_username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    } else {
+      // Prompt for username on first visit
+      const name = prompt("Welcome to Tej! What's your name?");
+      if (name) {
+        setUsername(name);
+        localStorage.setItem("tej_username", name);
+      }
+    }
+
     // Check if speech services are supported
     if (!speechRecognition.current.isSupported()) {
       toast({
@@ -187,6 +201,15 @@ const Index = () => {
     });
   };
 
+  const handleSaveChat = () => {
+    if (status !== "idle") return;
+    // TODO: Implement save to MongoDB
+    toast({
+      title: "Save Chat (Coming Soon)",
+      description: "Chat history saving will be implemented with MongoDB integration.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card p-4 overflow-hidden">
       {/* Animated background effects */}
@@ -196,10 +219,18 @@ const Index = () => {
       </div>
 
       <div className="relative max-w-6xl mx-auto space-y-8">
+        {/* Username Display */}
+        {username && (
+          <div className="absolute top-0 right-0 flex items-center gap-2 bg-card/50 backdrop-blur-sm border border-primary/30 rounded-lg px-4 py-2 tej-glow">
+            <User className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">{username}</span>
+          </div>
+        )}
+
         {/* Header */}
-        <div className="text-center space-y-2 animate-fade-in">
-          <h1 className="text-5xl font-bold jarvis-text-glow">J.A.R.V.I.S.</h1>
-          <p className="text-muted-foreground">Your Personal Smart AI Assistant</p>
+        <div className="text-center space-y-2 animate-fade-in pt-12">
+          <h1 className="text-5xl font-bold tej-text-glow">Tej</h1>
+          <p className="text-muted-foreground">Your Smart AI Assistant</p>
         </div>
 
         {/* AI Core */}
@@ -235,12 +266,12 @@ const Index = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
               disabled={status !== "idle"}
-              className="flex-1 border-primary/30 bg-card/50 backdrop-blur-sm focus:border-primary jarvis-glow"
+              className="flex-1 border-primary/30 bg-card/50 backdrop-blur-sm focus:border-primary tej-glow"
             />
             <Button
               type="submit"
               disabled={status !== "idle" || !input.trim()}
-              className="bg-primary hover:bg-primary/90 jarvis-glow"
+              className="bg-primary hover:bg-primary/90 tej-glow"
             >
               <Send className="w-4 h-4" />
             </Button>
@@ -254,8 +285,8 @@ const Index = () => {
               size="lg"
               className={`rounded-full w-16 h-16 ${
                 status === "listening" 
-                  ? "bg-destructive hover:bg-destructive/90 jarvis-glow-strong" 
-                  : "bg-accent hover:bg-accent/90 jarvis-glow"
+                  ? "bg-destructive hover:bg-destructive/90 tej-glow-strong" 
+                  : "bg-accent hover:bg-accent/90 tej-glow"
               }`}
             >
               {status === "listening" ? (
@@ -270,6 +301,7 @@ const Index = () => {
           <QuickActions
             onTimeClick={handleTimeClick}
             onWeatherClick={handleWeatherClick}
+            onSaveClick={handleSaveChat}
             onClearClick={handleClearChat}
             disabled={status !== "idle"}
           />

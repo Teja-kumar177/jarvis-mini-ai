@@ -1,5 +1,28 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// TODO: MongoDB Integration Placeholder
+// ==================================================
+// Future implementation may log weather queries for analytics
+//
+// Schema Example:
+// interface WeatherQuerySchema {
+//   username: string;
+//   location: string;
+//   timestamp: Date;
+//   weatherData: object;
+// }
+//
+// Function to be implemented:
+// async function logWeatherQuery(username: string, location: string, data: any) {
+//   await weatherQueriesCollection.insertOne({
+//     username,
+//     location,
+//     weatherData: data,
+//     timestamp: new Date()
+//   });
+// }
+// ==================================================
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",

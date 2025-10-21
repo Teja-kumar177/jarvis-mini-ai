@@ -24,7 +24,7 @@ export const ChatWindow = ({ messages }: ChatWindowProps) => {
       <div ref={scrollRef} className="space-y-4">
         {messages.length === 0 ? (
           <div className="text-center text-muted-foreground py-8">
-            <p className="text-lg jarvis-text-glow">J.A.R.V.I.S. is ready, Sir.</p>
+            <p className="text-lg tej-text-glow">Hello, I'm Tej – your personal AI assistant. How can I help you today?</p>
             <p className="text-sm mt-2">Start a conversation by voice or text.</p>
           </div>
         ) : (
@@ -37,11 +37,11 @@ export const ChatWindow = ({ messages }: ChatWindowProps) => {
                 className={`max-w-[80%] rounded-lg p-3 ${
                   message.role === "user"
                     ? "bg-primary/20 border border-primary/30 ml-4"
-                    : "bg-accent/10 border border-accent/30 mr-4 jarvis-glow"
+                    : "bg-gradient-to-br from-card to-secondary border border-accent/30 mr-4 tej-glow"
                 }`}
               >
                 <p className="text-sm font-medium mb-1 text-primary">
-                  {message.role === "user" ? "You" : "J.A.R.V.I.S."}
+                  {message.role === "user" ? "You" : "Tej"}
                 </p>
                 <p className="text-foreground whitespace-pre-wrap">{message.content}</p>
               </div>
