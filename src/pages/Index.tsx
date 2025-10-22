@@ -25,6 +25,7 @@ const Index = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [username, setUsername] = useState<string>("");
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -62,10 +63,13 @@ const Index = () => {
     setMessages(prev => [...prev, userMsg]);
 
     try {
+      const currentUsername = localStorage.getItem("tej_username") || "Guest";
       const { data, error } = await supabase.functions.invoke("jarvis-chat", {
         body: { 
           messages: [...messages, userMsg],
-          task 
+          task,
+          username: currentUsername,
+          sessionId
         },
       });
 

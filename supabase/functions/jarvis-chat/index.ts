@@ -1,49 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-// TODO: MongoDB Integration Placeholder
-// ==================================================
-// Future implementation will store chat history in MongoDB
-// 
-// Connection setup (to be implemented):
-// import { MongoClient } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
-// const client = new MongoClient();
-// await client.connect(Deno.env.get('MONGODB_URI'));
-// const db = client.database('tej_ai');
-// const chatsCollection = db.collection('chats');
-//
-// Schema Example:
-// interface ChatSchema {
-//   username: string;
-//   message: string;
-//   reply: string;
-//   timestamp: Date;
-//   sessionId: string;
-// }
-//
-// Functions to be implemented:
-// async function saveChatToDB(username: string, message: string, reply: string) {
-//   await chatsCollection.insertOne({
-//     username,
-//     message,
-//     reply,
-//     timestamp: new Date(),
-//     sessionId: crypto.randomUUID()
-//   });
-// }
-//
-// async function fetchChatHistory(username: string, limit = 50) {
-//   return await chatsCollection
-//     .find({ username })
-//     .sort({ timestamp: -1 })
-//     .limit(limit)
-//     .toArray();
-// }
-// ==================================================
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Initialize Supabase client for database operations
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -51,7 +17,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, task } = await req.json();
+    const { messages, task, username, sessionId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -76,10 +42,6 @@ Help users with their questions and tasks effectively.`;
         day: 'numeric' 
       })}.`;
     }
-
-    // TODO: Future MongoDB integration - save conversation context
-    // const username = req.headers.get('x-username') || 'anonymous';
-    // await saveChatToDB(username, lastUserMessage, aiReply);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -119,6 +81,27 @@ Help users with their questions and tasks effectively.`;
 
     const data = await response.json();
     const reply = data.choices[0].message.content;
+    
+    // Save chat to database if username and sessionId are provided
+    if (username && sessionId && messages.length > 0) {
+      const userMessage = messages[messages.length - 1].content;
+      const { error: dbError } = await supabase
+        .from('chat_history')
+        .insert({
+          username,
+          message: userMessage,
+          reply,
+          session_id: sessionId,
+          timestamp: new Date().toISOString(),
+        });
+      
+      if (dbError) {
+        console.error('Error saving chat to database:', dbError);
+        // Don't fail the request if DB save fails
+      } else {
+        console.log('Chat saved to database successfully');
+      }
+    }
 
     return new Response(
       JSON.stringify({ reply }),

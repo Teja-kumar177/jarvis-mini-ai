@@ -20,19 +20,37 @@ const ChatHistory = () => {
   const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
-    // Load username from localStorage
-    const storedUsername = localStorage.getItem("tej_username");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-
-    // TODO: Fetch chat history from MongoDB
-    // Placeholder data for demonstration
-    // In the future, this would call:
-    // const history = await fetchChatHistory(storedUsername);
-    // setChatHistory(history);
+    const fetchHistory = async () => {
+      // Load username from localStorage
+      const storedUsername = localStorage.getItem("tej_username");
+      if (storedUsername) {
+        setUsername(storedUsername);
+        
+        // Fetch chat history from database
+        const { supabase } = await import("@/integrations/supabase/client");
+        const { data, error } = await supabase
+          .from('chat_history')
+          .select('*')
+          .eq('username', storedUsername)
+          .order('timestamp', { ascending: false })
+          .limit(50);
+        
+        if (error) {
+          console.error('Error fetching chat history:', error);
+        } else if (data) {
+          setChatHistory(data.map(item => ({
+            id: item.id,
+            username: item.username,
+            message: item.message,
+            reply: item.reply,
+            timestamp: new Date(item.timestamp),
+            sessionId: item.session_id
+          })));
+        }
+      }
+    };
     
-    // For now, show empty state with instructions
+    fetchHistory();
   }, []);
 
   return (
@@ -61,49 +79,23 @@ const ChatHistory = () => {
           <div className="w-32" /> {/* Spacer for centering */}
         </div>
 
-        {/* MongoDB Integration Notice */}
-        <Card className="p-6 border-accent/30 bg-card/50 backdrop-blur-sm tej-glow animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <div className="text-center space-y-4">
-            <div className="flex justify-center">
-              <div className="p-4 rounded-full bg-accent/10 border border-accent/30">
-                <MessageSquare className="w-8 h-8 text-accent" />
+        {/* Chat History Stats */}
+        {chatHistory.length > 0 && (
+          <Card className="p-6 border-accent/30 bg-card/50 backdrop-blur-sm tej-glow animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <div className="flex items-center justify-center gap-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary">{chatHistory.length}</div>
+                <div className="text-sm text-muted-foreground">Total Messages</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">
+                  {new Set(chatHistory.map(item => item.sessionId)).size}
+                </div>
+                <div className="text-sm text-muted-foreground">Sessions</div>
               </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">MongoDB Integration Coming Soon</h2>
-              <p className="text-muted-foreground">
-                This page will display your complete chat history once MongoDB is integrated.
-              </p>
-            </div>
-            <div className="bg-muted/20 rounded-lg p-4 text-left">
-              <h3 className="font-semibold mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                Planned Features:
-              </h3>
-              <ul className="space-y-2 text-sm text-muted-foreground ml-6">
-                <li>• View all past conversations organized by date</li>
-                <li>• Search through chat history by keywords</li>
-                <li>• Filter by date range or conversation topic</li>
-                <li>• Export chat history as PDF or text</li>
-                <li>• Delete individual conversations or bulk delete</li>
-                <li>• Restore previous conversations to continue chatting</li>
-              </ul>
-            </div>
-            <div className="text-sm text-muted-foreground pt-4 border-t border-border/50">
-              <p className="font-semibold mb-2">Technical Implementation Notes:</p>
-              <p className="text-xs">
-                The backend edge function already includes MongoDB connection placeholders and schema definitions.
-                After exporting your project, you can integrate MongoDB by:
-              </p>
-              <ol className="text-xs mt-2 space-y-1 text-left mx-auto max-w-xl">
-                <li>1. Setting up a MongoDB Atlas cluster or local MongoDB instance</li>
-                <li>2. Adding the MONGODB_URI environment variable</li>
-                <li>3. Uncommenting the MongoDB connection code in the edge functions</li>
-                <li>4. Implementing the saveChatToDB and fetchChatHistory functions</li>
-              </ol>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
 
         {/* Placeholder History List */}
         <div className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
