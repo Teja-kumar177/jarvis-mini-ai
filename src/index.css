@@ -8,49 +8,49 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Tej Futuristic Theme - Dark with Neon Blue Accents */
+    /* Iron Man Theme - Gold and Red */
     --background: 225 18% 5%;
-    --foreground: 189 100% 90%;
+    --foreground: 40 100% 90%;
 
-    --card: 210 100% 12%;
-    --card-foreground: 189 100% 90%;
+    --card: 40 100% 8%;
+    --card-foreground: 40 100% 90%;
 
-    --popover: 210 100% 12%;
-    --popover-foreground: 189 100% 90%;
+    --popover: 40 100% 8%;
+    --popover-foreground: 40 100% 90%;
 
-    --primary: 189 100% 50%;
+    --primary: 40 100% 50%;
     --primary-foreground: 225 18% 5%;
 
-    --secondary: 210 100% 20%;
-    --secondary-foreground: 189 100% 90%;
+    --secondary: 40 100% 15%;
+    --secondary-foreground: 40 100% 90%;
 
-    --muted: 210 100% 15%;
-    --muted-foreground: 189 60% 70%;
+    --muted: 40 100% 12%;
+    --muted-foreground: 40 60% 70%;
 
-    --accent: 216 100% 55%;
-    --accent-foreground: 225 18% 5%;
+    --accent: 348 83% 47%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 189 100% 90%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 189 80% 30%;
-    --input: 210 100% 15%;
-    --ring: 189 100% 50%;
+    --border: 40 80% 30%;
+    --input: 40 100% 12%;
+    --ring: 40 100% 50%;
 
     --radius: 0.75rem;
 
-    /* Custom Tej colors */
-    --tej-glow: 189 100% 50%;
-    --tej-secondary-glow: 216 100% 55%;
+    /* Custom Tej colors - Iron Man style */
+    --tej-glow: 40 100% 50%;
+    --tej-secondary-glow: 348 83% 47%;
     --tej-deep: 225 18% 5%;
-    --tej-surface: 210 100% 12%;
-    --tej-border: 189 80% 35%;
+    --tej-surface: 40 100% 8%;
+    --tej-border: 40 80% 35%;
     
     /* Gradients */
-    --gradient-radial: radial-gradient(circle, hsl(189 100% 50% / 0.15), transparent 70%);
-    --gradient-primary: linear-gradient(135deg, hsl(216 100% 55%), hsl(189 100% 50%));
-    --gradient-bg: linear-gradient(180deg, hsl(225 18% 5%), hsl(210 100% 8%));
-    --gradient-chat: linear-gradient(135deg, hsl(210 100% 12%), hsl(210 100% 20%));
+    --gradient-radial: radial-gradient(circle, hsl(40 100% 50% / 0.15), transparent 70%);
+    --gradient-primary: linear-gradient(135deg, hsl(348 83% 47%), hsl(40 100% 50%));
+    --gradient-bg: linear-gradient(180deg, hsl(225 18% 5%), hsl(40 100% 8%));
+    --gradient-chat: linear-gradient(135deg, hsl(40 100% 12%), hsl(348 83% 15%));
   }
 }
 

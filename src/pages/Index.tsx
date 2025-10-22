@@ -207,15 +207,6 @@ const Index = () => {
     });
   };
 
-  const handleSaveChat = () => {
-    if (status !== "idle") return;
-    // TODO: Implement save to MongoDB
-    toast({
-      title: "Save Chat (Coming Soon)",
-      description: "Chat history saving will be implemented with MongoDB integration.",
-    });
-  };
-
   const handleStopSpeaking = () => {
     textToSpeech.current.stop();
     setStatus("idle");
@@ -330,7 +321,6 @@ const Index = () => {
           <QuickActions
             onTimeClick={handleTimeClick}
             onWeatherClick={handleWeatherClick}
-            onSaveClick={handleSaveChat}
             onHistoryClick={handleViewHistory}
             onClearClick={handleClearChat}
             disabled={status !== "idle"}
