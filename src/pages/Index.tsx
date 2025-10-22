@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Mic, Send, MicOff, User, StopCircle } from "lucide-react";
-import { AICore } from "@/components/AICore";
 import { VoiceVisualizer } from "@/components/VoiceVisualizer";
 import { ChatWindow } from "@/components/ChatWindow";
 import { QuickActions } from "@/components/QuickActions";
 import { StatusIndicator } from "@/components/StatusIndicator";
+import { IronManHelmet } from "@/components/IronManHelmet";
+import { ArmorBackground } from "@/components/ArmorBackground";
 import { SpeechRecognitionService, TextToSpeechService } from "@/utils/speechRecognition";
 
 interface Message {
@@ -221,14 +222,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card p-4 overflow-hidden">
-      {/* Animated background effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }} />
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card p-4 overflow-hidden relative">
+      <ArmorBackground />
 
-      <div className="relative max-w-6xl mx-auto space-y-8">
+      <div className="relative max-w-6xl mx-auto space-y-8 z-10">
         {/* Username Display */}
         {username && (
           <div className="absolute top-0 right-0 flex items-center gap-2 bg-card/50 backdrop-blur-sm border border-primary/30 rounded-lg px-4 py-2 tej-glow">
@@ -243,12 +240,9 @@ const Index = () => {
           <p className="text-muted-foreground">Your Smart AI Assistant</p>
         </div>
 
-        {/* AI Core */}
+        {/* Iron Man Helmet */}
         <div className="flex justify-center animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <AICore 
-            isActive={status !== "idle"} 
-            isSpeaking={status === "speaking"} 
-          />
+          <IronManHelmet isActive={status !== "idle"} />
         </div>
 
         {/* Status */}
